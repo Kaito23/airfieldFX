@@ -2,10 +2,14 @@
  */
 package com.airhacks.airfield;
 
+import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
@@ -36,6 +40,11 @@ public class TakeDown {
             System.out.println("+App installed into: " + this.localPath);
         } catch (GitAPIException ex) {
             System.err.println("--Cannot download files: " + ex.getMessage());
+            Frame frame = new Frame();
+			JOptionPane.showMessageDialog(frame,
+					"Cannot download files: " + ex.getMessage(),
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -55,6 +64,11 @@ public class TakeDown {
                 System.out.println("+Files updated, ready to start!");
             } else {
                 System.out.println("--Download was not successful " + pullResult.toString());
+                Frame frame = new Frame();
+    			JOptionPane.showMessageDialog(frame,
+    				    "Download was not successful " + pullResult.toString(),
+    				    "Error",
+    				    JOptionPane.ERROR_MESSAGE);
             }
         } catch (GitAPIException ex) {
             Logger.getLogger(TakeDown.class.getName()).log(Level.SEVERE, null, ex);

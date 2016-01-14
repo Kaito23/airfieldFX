@@ -1,17 +1,24 @@
-# airfield
+# airfieldFX
 Self-contained Software Deployment Tool
 
-airfield is a self-contained auto-update utility written in Java 8. 
+airfieldFX is a fork from Adam Bien's airfield.
+It is a self-contained auto-update utility written in Java 8. 
+I just added some functions to the frontend like a JavaFX progressbar and the
+option to skip the updateprocess.
 
-With airfield you can easily push you applications to a remote GIT repository and automatically distribute new versions to all connected Java clients.
+Your clients can automatically distribute new versions to all connected Java clients.
 
 At the very first start airfield will clone the remote repository, all subsequent launches will update the app. You only have to push your app to whatever GIT repo you like:
 
-[![Sample Workflow](https://i.ytimg.com/vi/mEMzM8B1E74/mqdefault.jpg)](https://www.youtube.com/embed/mEMzM8B1E74?rel=0)
 
 ##Usage:
 ```
-java -jar airfield.jar [LOCAL_INSTALLATION_DIR] [REMOTE_GIT_REPO]
+First you need to create a "airfield.properties" next to the .jar containing the path to the git repo:
+git=https://github.com/Kaito23/airfieldFX
+
+then you start your airfieldFX normally by:
+java -jar airfield.jar 
 ```
 
-airfield was motivated by many requests from the [afterburner.fx](https://github.com/AdamBien/afterburner.fx) project.
+# TODO
+- a securecheck with signing of the files in the git repo
