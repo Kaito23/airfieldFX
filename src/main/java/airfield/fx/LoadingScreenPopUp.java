@@ -1,5 +1,6 @@
-package airfield;
+package airfield.fx;
 
+import airfield.application.ProgramStarter;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,7 +13,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * A popup displaying a loading screen @author koetter
+ * A popup displaying a loading bar.
+ * 
+ * @author koetter
  */
 public class LoadingScreenPopUp extends Stage {
 	/** Text in Progressbar */
@@ -20,24 +23,15 @@ public class LoadingScreenPopUp extends Stage {
 	/** The progressbar */
 	private ProgressBar pbs;
 
-	/**
-	 * Displays a LoadingScreen.
-	 * 
-	 * @param newTab
-	 *            the new Tab that opens with the loading screen
-	 * @param tabPane
-	 *            the container tabpane
-	 * @param primaryStage
-	 *            the primary stage
-	 */
+	/** Displays a LoadingScreen. */
 	public LoadingScreenPopUp() {
 		super();
 		this.initStyle(StageStyle.UNDECORATED);
 		this.setResizable(false);
 		this.initModality(Modality.APPLICATION_MODAL);
-		text = new Text("Loading");
+		text = new Text("Suche nach Updates");
 
-		final Scene scene = new Scene(getContainerStackPane(), 250, 100);
+		final Scene scene = new Scene(getContainerStackPane(), 300, 70);
 
 		this.setScene(scene);
 		this.setOnCloseRequest(event -> {
@@ -66,9 +60,12 @@ public class LoadingScreenPopUp extends Stage {
 	 */
 	private HBox getBorderPane() {
 		final HBox container = new HBox();
-		final Button buttonCancel = new Button("X");
+		final Button buttonCancel = new Button("Abbrechen");
 		buttonCancel.setOnAction(event -> {
 			// cancel operation
+				buttonCancel.setDisable(true);
+				ProgramStarter ps = new ProgramStarter();
+				ps.startProgramm();
 				this.hide();
 				System.exit(0);
 			});

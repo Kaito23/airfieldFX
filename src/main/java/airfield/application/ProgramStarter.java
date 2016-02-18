@@ -1,4 +1,4 @@
-package airfield;
+package airfield.application;
 
 import java.awt.Frame;
 import java.io.File;
@@ -7,29 +7,43 @@ import java.net.URL;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Programmstarter starts the app by using a batch- or shellscript depending on
+ * the users os.
+ * 
+ * @author koetter
+ */
 public class ProgramStarter {
-
-	private static String OS = System.getProperty("os.name").toLowerCase();
-
+	/** The os the user is running */
+	private static final String OS = System.getProperty("os.name").toLowerCase();
+	/** Path to the running jar. */
 	private String path;
 
+	/**
+	 * 
+	 */
 	public ProgramStarter() {
-		path = path();
-		System.out.println("____" + path);
+		path = getPath();
+		System.out.println("path: " + path);
 	}
 
-	public String path() {
+	/**
+	 * Get the path to the running jar.
+	 * 
+	 * @return current execution path
+	 */
+	private String getPath() {
 		URL url1 = getClass().getResource("");
 		String ur = url1.toString();
-		ur = ur.substring(9);
-		String truepath[] = ur.split("/*.jar");
+		ur = ur.substring(SUBSTRING_BEGIN_INDEX);
+		String[] truepath = ur.split("/*.jar");
 		truepath[0] = truepath[0].replaceAll("%20", " ");
 		truepath[0] = truepath[0].replaceAll("airfield/airfield", "");
 		return truepath[0];
-	}// This methos will work on Windows and Linux as well.
+	}
 
 	/** Starts the programm depending on os */
-	public void startProgramm() {
+	public final void startProgramm() {
 		if (isWindows()) {
 			System.out.println("This is Windows");
 			startBatch();
@@ -47,28 +61,27 @@ public class ProgramStarter {
 
 		System.exit(0);
 
-		// List cmdAndArgs = Arrays.asList({"cmd", "/c", "upsert.bat"});
-		// File dir = new File(local);
-		//
-		// ProcessBuilder pb = new ProcessBuilder(cmdAndArgs);
-		// pb.directory(new File(dir));
-		// Process p = pb.start();
 	}
 
 	/** Starts the program batch script */
 	private void startBatch() {
 		try {
-			Runtime.getRuntime().exec("cmd /c start " + path + "app\\start.bat");
+			if (path.startsWith("/")) {
+				path = path.substring(1);
+			}
+			String command = "cmd /c start " + path + "app\\start.bat";
+			System.out.println("command: " + command);
+			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
 			Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	/** Starts the programs mac shell script */
 	private void startMacShell() {
 		try {
-			new File(path+"app/mac.sh").setExecutable(true);
+			new File(path + "app/mac.sh").setExecutable(true);
 			new ProcessBuilder(path + "app/mac.sh").start();
 		} catch (IOException e) {
 			Frame frame = new Frame();
@@ -79,7 +92,7 @@ public class ProgramStarter {
 	/** Starts the programs shell script */
 	private void startShell() {
 		try {
-			new File(path+"app/start.sh").setExecutable(true);
+			new File(path + "app/start.sh").setExecutable(true);
 			new ProcessBuilder(path + "app/start.sh").start();
 		} catch (IOException e) {
 			Frame frame = new Frame();
@@ -87,18 +100,33 @@ public class ProgramStarter {
 		}
 	}
 
-	/** Check if os is windows */
+	/**
+	 * Check if os is windows.
+	 * 
+	 * @return true if the users os is windows
+	 */
 	public static boolean isWindows() {
 		return (OS.indexOf("win") >= 0);
 	}
 
-	/** Check if os is mac */
+	/**
+	 * Check if os is mac.
+	 * 
+	 * @return true if the users os is mac
+	 */
 	public static boolean isMac() {
 		return (OS.indexOf("mac") >= 0);
 	}
 
-	/** Check if os is unix */
+	/**
+	 * Check if os is unix.
+	 * 
+	 * @return true if the users os is linux or unix
+	 */
 	public static boolean isUnix() {
 		return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
 	}
+
+	/** 9 */
+	private static final int SUBSTRING_BEGIN_INDEX = 9;
 }
