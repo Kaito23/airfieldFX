@@ -3,12 +3,11 @@ package airfield;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import panda.signer.SignChecker;
 import airfield.application.ProgramStarter;
 import airfield.application.PropertiesHandler;
 import airfield.application.TakeDown;
 import airfield.fx.LoadingScreenPopUp;
-import airfield.fx.AirfieldView;
-import airfield.secure.Generator;
 
 /**
  * Starts the application.
@@ -22,16 +21,13 @@ public class App extends Application {
 	private static String remote;
 	/** the programstarter */
 	private static ProgramStarter programStarter;
-
-	private boolean updateOnly = false;
-	private static boolean takeOff = false;
-	private static boolean init = false;
+	/** only update the app */
+	private static boolean updateOnly = false;
 
 	/**
 	 * Main
 	 * 
-	 * @param args
-	 *            the overgiven parameters
+	 * @param args the overgiven parameters
 	 */
 	public static final void main(final String[] args) {
 		programStarter = new ProgramStarter();
@@ -46,38 +42,35 @@ public class App extends Application {
 
 				if (string.equals("updateonly")) {
 					System.out.println("Only update the program");
-					System.out.println("TODO!"); // TODO
+					updateOnly = true;
 				}
 			}
-		} else {
-			System.out.println("Commit & push program!");
-			takeOff = true;
 		}
 
 		PropertiesHandler ph = new PropertiesHandler();
 		local = ph.getFolder();
-		launch(args); // Start javaFX frontend
-		/*
-		 * TODO try { remote = ph.getGit(); launch(args); } catch (Exception e)
-		 * { programStarter.startProgramm(); }
-		 */
+
+		try {
+			remote = ph.getGit();
+			launch(args);
+		} catch (Exception e) {
+			programStarter.startProgramm();
+		}
 
 	}
 
 	/** JavaFX starting point */
 	@Override
 	public final void start(final Stage primaryStage) throws Exception {
-		// takeDown();
-		takeOff(primaryStage);
+		takeDown(updateOnly);
 	}
 
 	/**
-	 * TODO
+	 * Updates the app and starts it.
 	 * 
-	 * @param skipProgramStart
-	 *            TODO
+	 * @param updateOnly skips the program start
 	 */
-	private void takeDown(final boolean skipProgramStart) {
+	private void takeDown(final boolean updateOnly) {
 
 		// Update
 		LoadingScreenPopUp lsPopUp = new LoadingScreenPopUp();
@@ -90,43 +83,22 @@ public class App extends Application {
 				lsPopUp.hide();
 
 				// Check files by signature
-				// TODO
+				SignChecker signChecker = new SignChecker();
+				boolean verify = signChecker.verify("pub", local);
+				System.out.println("verify result > " + verify);
 
 				// Start program
-				if (skipProgramStart) {
-					programStarter.startProgramm();
+				if (!updateOnly) {
+					if (verify) {
+						programStarter.startProgramm();
+					} else {
+						System.out.println("ACHTUNG ! Dateien sind nicht valide!");
+						// TODO DO logging
+					}
 				}
 			});
 		});
 
 		t.start();
 	}
-
-	/**
-	 * TODO
-	 * 
-	 * @param stage
-	 *            TODO
-	 */
-	private void takeOff(final Stage stage) {
-		System.out.println("takeOff -->");
-
-		// Sign content
-		AirfieldView signerView = new AirfieldView();
-		signerView.show();
-
-		// Create sign file
-
-		// Commit and push
-	}
-
-	private void initialize() {
-		takeDown(true);
-	}
-
-	/** Test if everything works fine */
-	private void test() {
-		System.out.println("Future release");
-	}
-
 }

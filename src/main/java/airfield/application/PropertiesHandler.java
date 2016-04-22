@@ -21,9 +21,7 @@ public class PropertiesHandler {
 	/** Default PropertiesHandler */
 	public PropertiesHandler() {
 		properties = new Properties();
-		BufferedInputStream stream = null;
-		try {
-			stream = new BufferedInputStream(new FileInputStream("airfield.properties"));//airfield/ TODO
+		try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream("airfield.properties"))) {
 			properties.load(stream);
 		} catch (FileNotFoundException e1) {
 			Frame frame = new Frame();
@@ -31,15 +29,6 @@ public class PropertiesHandler {
 		} catch (IOException e) {
 			Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-		} finally {
-			try {
-				if (stream != null) {
-					stream.close();
-				}
-			} catch (IOException e) {
-				Frame frame = new Frame();
-				JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-			}
 		}
 	}
 
@@ -50,7 +39,6 @@ public class PropertiesHandler {
 	 */
 	public final String getFolder() {
 		String folder = properties.getProperty("folder");
-
 		if (folder == null || folder.isEmpty()) {
 			folder = "app";
 		}
@@ -61,8 +49,7 @@ public class PropertiesHandler {
 	 * Get the git http url.
 	 * 
 	 * @return the git repo url
-	 * @throws Exception
-	 *             thrown if no repo is declared
+	 * @throws Exception thrown if no repo is declared
 	 */
 	public final String getGit() throws Exception {
 		String git = properties.getProperty("git");

@@ -33,16 +33,15 @@ public class TakeDown {
 	/**
 	 * Initializes with all required information for git.
 	 * 
-	 * @param localPath
-	 *            the path to the folder where the app will be installed
-	 * @param remotePath
-	 *            the path to the git repository
+	 * @param localPath the path to the folder where the app will be installed
+	 * @param remotePath the path to the git repository
 	 */
 	public TakeDown(final String localPath, final String remotePath) {
 		this.remotePath = remotePath;
 		this.localPath = localPath;
 	}
 
+	/** Clones the repo */
 	private void initialDownload() {
 		try {
 			this.git = Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();
@@ -54,7 +53,7 @@ public class TakeDown {
 		}
 
 	}
-	
+
 	/** Updates the local working copy */
 	private void update() {
 		try {
@@ -86,6 +85,11 @@ public class TakeDown {
 		}
 	}
 
+	/**
+	 * Opens the git repo.
+	 * 
+	 * @return true if the repo can be opened
+	 */
 	private boolean openLocal() {
 		File localRepo = new File(this.localPath);
 		try {
