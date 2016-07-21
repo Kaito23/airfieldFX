@@ -10,8 +10,8 @@ Your clients can automatically distribute new versions to all connected Java cli
 
 At the very first start airfield will clone the remote repository, all subsequent launches will update the app. You only have to push your app to whatever GIT repo you like:
 
-
 ## Usage:
+##Usage:
 ```
 First you need to create a "airfield.properties" next to the .jar containing the path to the git repo:
 git=https://github.com/Kaito23/airfieldFX
@@ -40,3 +40,11 @@ airfieldFX uses JavaFX Dialogs so you need JDK 8u40 or later!
 
 ## Overview image
 ![Here should be an overview image. Sadly it seems like something went wrong](airfieldFX_User.png "Overview image")
+# TODO
+- a securecheck with signing of the files in the git repo
+
+## Contribute
+### Build
+To build airfieldFX you need my small signing library
+[Latest release](https://github.com/Kaito23/panda-signer/releases/latest "Here you find the latest release of the signing library").  
+Or you can add the imported project in eclipse to the airfieldFX project.
