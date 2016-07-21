@@ -1,5 +1,7 @@
 package airfield;
 
+import org.apache.log4j.Logger;
+
 import airfield.application.ProgramStarter;
 import airfield.application.PropertiesHandler;
 import airfield.application.TakeDown;
@@ -27,6 +29,8 @@ public class App extends Application {
 	private static ProgramStarter programStarter;
 	/** only update the app */
 	private static boolean updateOnly = false;
+	/** Logger */
+	final static Logger logger = Logger.getLogger(App.class);
 
 	/**
 	 * Main
@@ -84,7 +88,7 @@ public class App extends Application {
 						programStarter.startProgramm();
 					} else {
 						System.out.println("ACHTUNG ! Dateien sind nicht valide!");
-						// TODO Logging!
+						logger.error("Files are not valid!");
 						final Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("Error");
 						alert.setHeaderText("The files are not valid!");
@@ -108,23 +112,26 @@ public class App extends Application {
 		if (args.length > 0) {
 			switch (args[0]) {
 			case "updateonly":
-				System.out.println("Only update the program");// TODO syso?
+				System.out.println("Only update the program");
 				updateOnly = true;
 				break;
 			case "skipUpdate":
-				System.out.println("skip update and start program");// TODO
-																	// syso?
+				System.out.println("skip update and start program");
 				programStarter.startProgramm();
 				System.exit(0);
 				break;
 			case "generateKeys":
 				generateKeys(args);
+				System.exit(0);
 				break;
 			case "sign":
 				sign(args);
+				System.exit(0);
 				break;
 			default:
 				System.out.println("No supported argument!");
+				logger.error("Unsupported argument overgiven: " + args[0]);
+				System.exit(0);
 				break;
 			}
 		}
@@ -156,9 +163,9 @@ public class App extends Application {
 		System.out.println("sign files");
 		final Signer signer = new Signer();
 		if (args.length == 2) {
-			signer.createSignFile(args[1], "./");// TODO
+			signer.createSignFile(args[1], "./");
 		} else {
-			signer.createSignFile("./", "./");
+			System.out.println("Please specify the path to your private key!");
 		}
 	}
 }

@@ -12,13 +12,14 @@ At the very first start airfield will clone the remote repository, all subsequen
 
 ## Usage:
 ##Usage:
-```
 First you need to create a "airfield.properties" next to the .jar containing the path to the git repo:
+```
 git=https://github.com/Kaito23/airfieldFX
+```
 
 then you start your airfieldFX normally by:
-java -jar airfield.jar 
-```
+java -jar airfield.jar
+or better by a bat/shell file 
 
 ## Delivery
 You can deliver a zip file containing a jre, airfieldFX.jar and the airfield.properties and a release version of your java program.
@@ -46,4 +47,8 @@ Or you can add the imported project in eclipse to the airfieldFX project.
 
 ## Overview image
 ![Here should be an overview image. Sadly it seems like something went wrong](airfieldFX_User.png "Overview image")
+
+## Found an issue?
+If you found an issue or if you have an idea for a feature request please
+use the Issue section of github to contribute :)
 

@@ -9,6 +9,8 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 /**
  * Handler for airfieldFX project properties.
  * 
@@ -17,6 +19,8 @@ import javax.swing.JOptionPane;
 public class PropertiesHandler {
 	/** The properties */
 	private final Properties properties;
+	/** Logger */
+	final static Logger logger = Logger.getLogger(PropertiesHandler.class);
 
 	/** Default PropertiesHandler */
 	public PropertiesHandler() {
@@ -27,10 +31,12 @@ public class PropertiesHandler {
 			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, "Properties nicht gefunden!", "Error", JOptionPane.ERROR_MESSAGE);
 			// TODO javafx panel
+			logger.error(e1);
 		} catch (final IOException e) {
 			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 			// TODO javafx panel
+			logger.error(e);
 		}
 	}
 
@@ -57,8 +63,8 @@ public class PropertiesHandler {
 	public final String getGit() throws Exception {
 		final String git = properties.getProperty("git");
 		if (git == null || git.isEmpty()) {
+			logger.error("Es muss ein gültiger Pfad zu einem Git-Repo angegeben werden!");
 			throw new Exception("Es muss ein gültiger Pfad zu einem Git-Repo angegeben werden!");
-			// TODO
 		}
 		return git;
 	}

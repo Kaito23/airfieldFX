@@ -5,11 +5,10 @@ package airfield.application;
 import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.CleanCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
@@ -32,6 +31,8 @@ public class TakeDown {
 	private final String localPath;
 	/** The Git */
 	private Git git;
+	/** Logger */
+	final static Logger logger = Logger.getLogger(TakeDown.class);
 
 	/**
 	 * Initializes with all required information for git.
@@ -95,8 +96,7 @@ public class TakeDown {
 				alert.showAndWait();
 			}
 		} catch (final GitAPIException ex) {
-			// TODO better loggging
-			Logger.getLogger(TakeDown.class.getName()).log(Level.SEVERE, null, ex);
+			logger.error(ex);
 		}
 	}
 

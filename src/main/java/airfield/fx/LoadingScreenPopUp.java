@@ -22,6 +22,12 @@ public class LoadingScreenPopUp extends Stage {
 	private final Text text;
 	/** The progressbar */
 	private ProgressBar pbs;
+	/** 50 */
+	private static final int FIFTY = 50;
+	/** 200 */
+	private static final int TWOHUNDRED = 200;
+	/** 48 */
+	private static final int CANCEL_BUTTON_HEIGHT = 48;
 
 	/** Displays a LoadingScreen. */
 	public LoadingScreenPopUp() {
@@ -63,12 +69,12 @@ public class LoadingScreenPopUp extends Stage {
 		final Button buttonCancel = new Button("Abbrechen");
 		buttonCancel.setOnAction(event -> {
 			// cancel operation
-				buttonCancel.setDisable(true);
-				ProgramStarter ps = new ProgramStarter();
-				ps.startProgramm();
-				this.hide();
-				System.exit(0);
-			});
+			buttonCancel.setDisable(true);
+			final ProgramStarter ps = new ProgramStarter();
+			ps.startProgramm();
+			this.hide();
+			System.exit(0);
+		});
 
 		buttonCancel.setMinHeight(CANCEL_BUTTON_HEIGHT);
 		container.setAlignment(Pos.CENTER);
@@ -90,12 +96,4 @@ public class LoadingScreenPopUp extends Stage {
 		stackPane.getChildren().setAll(pbs, text);
 		return stackPane;
 	}
-
-	/** 50 */
-	private static final int FIFTY = 50;
-	/** 200 */
-	private static final int TWOHUNDRED = 200;
-	/** 48 */
-	private static final int CANCEL_BUTTON_HEIGHT = 48;
-
 }

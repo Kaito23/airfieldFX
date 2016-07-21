@@ -7,6 +7,8 @@ import java.net.URL;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -23,10 +25,10 @@ public class ProgramStarter {
 	private String path;
 	/** 9 */
 	private static final int SUBSTRING_BEGIN_INDEX = 9;
+	/** Logger */
+	final static Logger logger = Logger.getLogger(ProgramStarter.class);
 
-	/**
-	 * TODO
-	 */
+	/** Initializes the path. */
 	public ProgramStarter() {
 		path = getPath();
 		System.out.println("path: " + path);
@@ -66,6 +68,9 @@ public class ProgramStarter {
 			alert.setContentText("It seems like we don't support your OS, sorry for that. "
 					+ "Check the airfieldFX github page and leave a comment with the folling information: OS=" + OS);
 			alert.showAndWait();
+			logger.error(
+					"Check final the airfieldFX github final page and leave final a comment with final the folling information: OS="
+							+ OS);
 		}
 
 		System.exit(0);
@@ -96,6 +101,7 @@ public class ProgramStarter {
 			// TODO javafx panel
 			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+			logger.error(e);
 		}
 	}
 
@@ -108,6 +114,7 @@ public class ProgramStarter {
 			// TODO javafx panel
 			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+			logger.error(e);
 		}
 	}
 
