@@ -38,13 +38,12 @@ airfieldFX uses JavaFX Dialogs so you need JDK 8u40 or later!
 - ~~a securecheck with signing of the files in the git repo~~ DONE
 - (self commit?)
 
-## Overview image
-![Here should be an overview image. Sadly it seems like something went wrong](airfieldFX_User.png "Overview image")
-# TODO
-- a securecheck with signing of the files in the git repo
-
 ## Contribute
 ### Build
 To build airfieldFX you need my small signing library
 [Latest release](https://github.com/Kaito23/panda-signer/releases/latest "Here you find the latest release of the signing library").  
 Or you can add the imported project in eclipse to the airfieldFX project.
+
+## Overview image
+![Here should be an overview image. Sadly it seems like something went wrong](airfieldFX_User.png "Overview image")
+
