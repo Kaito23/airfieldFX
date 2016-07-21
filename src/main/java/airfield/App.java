@@ -1,13 +1,17 @@
 package airfield;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.stage.Stage;
-import panda.signer.SignChecker;
 import airfield.application.ProgramStarter;
 import airfield.application.PropertiesHandler;
 import airfield.application.TakeDown;
 import airfield.fx.LoadingScreenPopUp;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
+import panda.signer.Generator;
+import panda.signer.SignChecker;
+import panda.signer.Signer;
 
 /**
  * Starts the application.
@@ -27,33 +31,19 @@ public class App extends Application {
 	/**
 	 * Main
 	 * 
-	 * @param args the overgiven parameters
+	 * @param args
+	 *            the overgiven parameters
 	 */
 	public static final void main(final String[] args) {
 		programStarter = new ProgramStarter();
-
-		if (args.length > 0) {
-			for (String string : args) {
-				if (string.equals("skipUpdate")) {
-					System.out.println("skip update and start program");
-					programStarter.startProgramm();
-					System.exit(0);
-				}
-
-				if (string.equals("updateonly")) {
-					System.out.println("Only update the program");
-					updateOnly = true;
-				}
-			}
-		}
-
-		PropertiesHandler ph = new PropertiesHandler();
+		argsHandler(args);
+		final PropertiesHandler ph = new PropertiesHandler();
 		local = ph.getFolder();
 
 		try {
 			remote = ph.getGit();
 			launch(args);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			programStarter.startProgramm();
 		}
 
@@ -68,23 +58,24 @@ public class App extends Application {
 	/**
 	 * Updates the app and starts it.
 	 * 
-	 * @param updateOnly skips the program start
+	 * @param updateOnly
+	 *            skips the program start
 	 */
 	private void takeDown(final boolean updateOnly) {
 
 		// Update
-		LoadingScreenPopUp lsPopUp = new LoadingScreenPopUp();
+		final LoadingScreenPopUp lsPopUp = new LoadingScreenPopUp();
 		lsPopUp.show();
 
-		Thread t = new Thread(() -> {
-			TakeDown installer = new TakeDown(local, remote);
+		final Thread t = new Thread(() -> {
+			final TakeDown installer = new TakeDown(local, remote);
 			installer.installOrUpdate();
 			Platform.runLater(() -> {
 				lsPopUp.hide();
 
 				// Check files by signature
-				SignChecker signChecker = new SignChecker();
-				boolean verify = signChecker.verify("pub", local);
+				final SignChecker signChecker = new SignChecker();
+				final boolean verify = signChecker.verify("pub", local);
 				System.out.println("verify result > " + verify);
 
 				// Start program
@@ -93,12 +84,81 @@ public class App extends Application {
 						programStarter.startProgramm();
 					} else {
 						System.out.println("ACHTUNG ! Dateien sind nicht valide!");
-						// TODO DO logging
+						// TODO Logging!
+						final Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("The files are not valid!");
+						alert.setContentText("The signing check failed! Your files may be corrupt.");
+
+						alert.showAndWait();
 					}
 				}
 			});
 		});
-
 		t.start();
+	}
+
+	/**
+	 * Handles the overgiven arguments.
+	 * 
+	 * @param args
+	 *            the overgiven arguments
+	 */
+	private static void argsHandler(final String[] args) {
+		if (args.length > 0) {
+			switch (args[0]) {
+			case "updateonly":
+				System.out.println("Only update the program");// TODO syso?
+				updateOnly = true;
+				break;
+			case "skipUpdate":
+				System.out.println("skip update and start program");// TODO
+																	// syso?
+				programStarter.startProgramm();
+				System.exit(0);
+				break;
+			case "generateKeys":
+				generateKeys(args);
+				break;
+			case "sign":
+				sign(args);
+				break;
+			default:
+				System.out.println("No supported argument!");
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Starts the key-generating process.
+	 * 
+	 * @param args
+	 *            the overgiven arguments for the destination folder of the keys
+	 */
+	private static void generateKeys(final String[] args) {
+		System.out.println("generate keypair");
+		final Generator generator = new Generator();
+		if (args.length == 2) {
+			generator.generateKeypair(args[1]);
+		} else {
+			generator.generateKeypair();
+		}
+	}
+
+	/**
+	 * Starts the signing process.
+	 * 
+	 * @param args
+	 *            the overgiven arguments for a path to the private key
+	 */
+	private static void sign(final String[] args) {
+		System.out.println("sign files");
+		final Signer signer = new Signer();
+		if (args.length == 2) {
+			signer.createSignFile(args[1], "./");// TODO
+		} else {
+			signer.createSignFile("./", "./");
+		}
 	}
 }

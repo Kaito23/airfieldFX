@@ -7,6 +7,9 @@ import java.net.URL;
 
 import javax.swing.JOptionPane;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  * Programmstarter starts the app by using a batch- or shellscript depending on
  * the users os.
@@ -18,9 +21,11 @@ public class ProgramStarter {
 	private static final String OS = System.getProperty("os.name").toLowerCase();
 	/** Path to the running jar. */
 	private String path;
+	/** 9 */
+	private static final int SUBSTRING_BEGIN_INDEX = 9;
 
 	/**
-	 * 
+	 * TODO
 	 */
 	public ProgramStarter() {
 		path = getPath();
@@ -33,10 +38,10 @@ public class ProgramStarter {
 	 * @return current execution path
 	 */
 	private String getPath() {
-		URL url1 = getClass().getResource("");
+		final URL url1 = getClass().getResource("");
 		String ur = url1.toString();
 		ur = ur.substring(SUBSTRING_BEGIN_INDEX);
-		String[] truepath = ur.split("/*.jar");
+		final String[] truepath = ur.split("/*.jar");
 		truepath[0] = truepath[0].replaceAll("%20", " ");
 		truepath[0] = truepath[0].replaceAll("airfield/airfield", "");
 		return truepath[0];
@@ -54,9 +59,13 @@ public class ProgramStarter {
 			System.out.println("This is Unix or Linux");
 			startShell();
 		} else {
-			System.out.println("Your OS is not support!!");
-			Frame frame = new Frame();
-			JOptionPane.showMessageDialog(frame, "Your OS is not support!!", "Error", JOptionPane.ERROR_MESSAGE);
+			System.out.println("Your OS is not support!");
+			final Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("OS not support");
+			alert.setHeaderText("Your OS is not support");
+			alert.setContentText("It seems like we don't support your OS, sorry for that. "
+					+ "Check the airfieldFX github page and leave a comment with the folling information: OS=" + OS);
+			alert.showAndWait();
 		}
 
 		System.exit(0);
@@ -69,11 +78,11 @@ public class ProgramStarter {
 			if (path.startsWith("/")) {
 				path = path.substring(1);
 			}
-			String command = "cmd /c start " + path + "app\\start.bat";
+			final String command = "cmd /c start " + path + "app\\start.bat";
 			System.out.println("command: " + command);
 			Runtime.getRuntime().exec(command);
-		} catch (IOException e) {
-			Frame frame = new Frame();
+		} catch (final IOException e) {
+			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -83,8 +92,9 @@ public class ProgramStarter {
 		try {
 			new File(path + "app/mac.sh").setExecutable(true);
 			new ProcessBuilder(path + "app/mac.sh").start();
-		} catch (IOException e) {
-			Frame frame = new Frame();
+		} catch (final IOException e) {
+			// TODO javafx panel
+			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -94,8 +104,9 @@ public class ProgramStarter {
 		try {
 			new File(path + "app/start.sh").setExecutable(true);
 			new ProcessBuilder(path + "app/start.sh").start();
-		} catch (IOException e) {
-			Frame frame = new Frame();
+		} catch (final IOException e) {
+			// TODO javafx panel
+			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -126,7 +137,4 @@ public class ProgramStarter {
 	public static boolean isUnix() {
 		return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
 	}
-
-	/** 9 */
-	private static final int SUBSTRING_BEGIN_INDEX = 9;
 }

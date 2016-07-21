@@ -1,8 +1,8 @@
 package airfield.application;
 
 import java.awt.Frame;
-import java.io.FileInputStream;
 import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
@@ -16,19 +16,21 @@ import javax.swing.JOptionPane;
  */
 public class PropertiesHandler {
 	/** The properties */
-	private Properties properties;
+	private final Properties properties;
 
 	/** Default PropertiesHandler */
 	public PropertiesHandler() {
 		properties = new Properties();
 		try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream("airfield.properties"))) {
 			properties.load(stream);
-		} catch (FileNotFoundException e1) {
-			Frame frame = new Frame();
+		} catch (final FileNotFoundException e1) {
+			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, "Properties nicht gefunden!", "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (IOException e) {
-			Frame frame = new Frame();
+			// TODO javafx panel
+		} catch (final IOException e) {
+			final Frame frame = new Frame();
 			JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+			// TODO javafx panel
 		}
 	}
 
@@ -49,12 +51,14 @@ public class PropertiesHandler {
 	 * Get the git http url.
 	 * 
 	 * @return the git repo url
-	 * @throws Exception thrown if no repo is declared
+	 * @throws Exception
+	 *             thrown if no repo is declared
 	 */
 	public final String getGit() throws Exception {
-		String git = properties.getProperty("git");
+		final String git = properties.getProperty("git");
 		if (git == null || git.isEmpty()) {
 			throw new Exception("Es muss ein gültiger Pfad zu einem Git-Repo angegeben werden!");
+			// TODO
 		}
 		return git;
 	}
