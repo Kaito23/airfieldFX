@@ -25,11 +25,12 @@ public class PropertiesHandler {
 	/** Default PropertiesHandler */
 	public PropertiesHandler() {
 		properties = new Properties();
-		try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream("airfield.properties"))) {
+		try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream("./airfield.properties"))) {
 			properties.load(stream);
 		} catch (final FileNotFoundException e1) {
 			final Frame frame = new Frame();
-			JOptionPane.showMessageDialog(frame, "Properties nicht gefunden!", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "Properties nicht gefunden! ./airfield.properties", "Error",
+					JOptionPane.ERROR_MESSAGE);
 			// TODO javafx panel
 			logger.error(e1);
 		} catch (final IOException e) {

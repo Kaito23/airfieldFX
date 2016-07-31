@@ -128,6 +128,10 @@ public class App extends Application {
 				sign(args);
 				System.exit(0);
 				break;
+			case "testSign":
+				testSigning();
+				System.exit(0);
+				break;
 			default:
 				System.out.println("No supported argument!");
 				logger.error("Unsupported argument overgiven: " + args[0]);
@@ -163,9 +167,20 @@ public class App extends Application {
 		System.out.println("sign files");
 		final Signer signer = new Signer();
 		if (args.length == 2) {
-			signer.createSignFile(args[1], "./");
+			signer.createSignFile(args[1], "../app/");
 		} else {
 			System.out.println("Please specify the path to your private key!");
+		}
+	}
+
+	/** Test the signing */
+	private static void testSigning() {
+		final SignChecker signChecker = new SignChecker();
+		final boolean valid = signChecker.verify("./pub", "../app/");
+		if (valid) {
+			System.out.println("Files are valid");
+		} else {
+			System.out.println("!Files are corrupt!");
 		}
 	}
 }

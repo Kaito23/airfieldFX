@@ -106,6 +106,7 @@ public class TakeDown {
 	 * @return true if the repo can be opened
 	 */
 	private boolean openLocal() {
+		System.out.println("this.localPath = " + this.localPath);
 		final File localRepo = new File(this.localPath);
 		try {
 			this.git = Git.open(localRepo);
