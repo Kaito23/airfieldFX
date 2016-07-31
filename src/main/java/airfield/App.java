@@ -180,7 +180,7 @@ public class App extends Application {
 		if (valid) {
 			System.out.println("Files are valid");
 		} else {
-			System.out.println("!Files are corrupt!");
+			System.out.println("! Files are corrupt !");
 		}
 	}
 }
